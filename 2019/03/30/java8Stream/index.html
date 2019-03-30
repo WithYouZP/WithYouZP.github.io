@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="StreamStream是什么？Stream 使用一种类似用 SQL 语句从数据库查询数据的直观方式来提供一种对 Java 集合运算和表达的高阶抽象。 Stream API可以极大提高Java程序员的生产力，让程序员写出高效率、干净、简洁的代码。 这种风格将要处理的元素集合看作一种流，流在管道中传输，并且可以在管道的节点上进行处理，比如筛选，排序，聚合等。 Stream有以下特性及优点：  无存储">
+<meta name="keywords" content="java8">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JAVA8使用Stream处理集合">
+<meta property="og:url" content="http://yoursite.com/2019/03/30/java8Stream/index.html">
+<meta property="og:site_name" content="夜阑卧听风吹雨的博客">
+<meta property="og:description" content="StreamStream是什么？Stream 使用一种类似用 SQL 语句从数据库查询数据的直观方式来提供一种对 Java 集合运算和表达的高阶抽象。 Stream API可以极大提高Java程序员的生产力，让程序员写出高效率、干净、简洁的代码。 这种风格将要处理的元素集合看作一种流，流在管道中传输，并且可以在管道的节点上进行处理，比如筛选，排序，聚合等。 Stream有以下特性及优点：  无存储">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/03/30/java8Stream/java8stream.png">
+<meta property="og:image" content="http://yoursite.com/2019/03/30/java8Stream/liushui.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/30/java8Stream/streamapi.png">
+<meta property="og:image" content="http://yoursite.com/2019/03/30/java8Stream/last.png">
+<meta property="og:image" content="http://yoursite.com/2019/03/30/java8Stream/last1.png">
+<meta property="og:image" content="http://yoursite.com/2019/03/30/java8Stream/last2.jpg">
+<meta property="og:updated_time" content="2019-03-30T04:13:20.918Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JAVA8使用Stream处理集合">
+<meta name="twitter:description" content="StreamStream是什么？Stream 使用一种类似用 SQL 语句从数据库查询数据的直观方式来提供一种对 Java 集合运算和表达的高阶抽象。 Stream API可以极大提高Java程序员的生产力，让程序员写出高效率、干净、简洁的代码。 这种风格将要处理的元素集合看作一种流，流在管道中传输，并且可以在管道的节点上进行处理，比如筛选，排序，聚合等。 Stream有以下特性及优点：  无存储">
+<meta name="twitter:image" content="http://yoursite.com/2019/03/30/java8Stream/java8stream.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="夜阑卧听风吹雨的博客" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/30/java8Stream/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>JAVA8使用Stream处理集合 | 夜阑卧听风吹雨的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">夜阑卧听风吹雨的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">心中有丘壑，眉目做山河</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/30/java8Stream/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zippo">
+      <meta itemprop="description" content="从一而终，认真且怂">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="夜阑卧听风吹雨的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JAVA8使用Stream处理集合
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-30 11:09:00 / 修改时间：12:13:20" itemprop="dateCreated datePublished" datetime="2019-03-30T11:09:00+08:00">2019-03-30</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h1><h2 id="Stream是什么？"><a href="#Stream是什么？" class="headerlink" title="Stream是什么？"></a>Stream是什么？</h2><p><strong>Stream 使用一种类似用 SQL 语句从数据库查询数据的直观方式来提供一种对 Java 集合运算和表达的高阶抽象</strong>。</p>
+<p>Stream API可以极大提高Java程序员的生产力，让程序员写出高效率、干净、简洁的代码。</p>
+<p>这种风格将要处理的元素集合看作一种流，流在管道中传输，并且可以在管道的节点上进行处理，比如筛选，排序，聚合等。</p>
+<p>Stream有以下特性及优点：</p>
+<ul>
+<li>无存储。Stream不是一种数据结构，它只是某种数据源的一个视图，数据源可以是一个数组，Java容器或I/O channel等。</li>
+<li>为函数式编程而生。对Stream的任何修改都不会修改背后的数据源，比如对Stream执行过滤操作并不会删除被过滤的元素，而是会产生一个不包含被过滤元素的新Stream。</li>
+<li>惰式执行。Stream上的操作并不会立即执行，只有等到用户真正需要结果的时候才会执行。</li>
+<li>可消费性。Stream只能被“消费”一次，一旦遍历过就会失效，就像容器的迭代器那样，想要再次遍历必须重新生成。</li>
+</ul>
+<p>我们举一个例子，来看一下到底Stream可以做什么事情：</p>
+<p><img src="/2019/03/30/java8Stream/java8stream.png" alt></p>
+<p>上面的例子中，获取一些带颜色塑料球作为数据源，首先过滤掉红色的、把它们融化成随机的三角形。再过滤器并删除小的三角形。最后计算出剩余图形的周长。</p>
+<p>如上图，对于流的处理，主要有三种关键性操作：分别是流的创建、中间操作（intermediate operation）以及最终操作(terminal operation)。</p>
+<a id="more"></a>
+<h2 id="如何使用Stream"><a href="#如何使用Stream" class="headerlink" title="如何使用Stream?"></a>如何使用Stream?</h2><p><strong>在Java 8中，可以有多种方法来创建流。</strong></p>
+<p><strong>1、通过已有的集合来创建流</strong></p>
+<p>在Java 8中，除了增加了很多Stream相关的类以外，还对集合类自身做了增强，在其中增加了stream方法，可以将一个集合类转换成流。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; strings = Arrays.asList(&quot;zippo&quot;, &quot;zp&quot;, &quot;zulongbo&quot;, &quot;Hello&quot;, &quot;HelloWorld&quot;);</span><br><span class="line">Stream&lt;String&gt; stream = strings.stream();</span><br></pre></td></tr></table></figure>
+<p>以上，通过一个已有的List创建一个流。除此以外，还有一个parallelStream方法，可以为集合创建一个并行流。</p>
+<p>这种通过集合创建出一个Stream的方式也是比较常用的一种方式。</p>
+<p><strong>2、通过Stream创建流</strong></p>
+<p>可以使用Stream类提供的方法，直接返回一个由指定元素组成的流。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Stream&lt;String&gt; stream = Stream.of(&quot;zippo&quot;, &quot;zp&quot;, &quot;zulongbo&quot;, &quot;Hello&quot;, &quot;HelloWorld&quot;);</span><br></pre></td></tr></table></figure>
+<p>如以上代码，直接通过of方法，创建并返回一个Stream。</p>
+<h2 id="Stream的中间操作"><a href="#Stream的中间操作" class="headerlink" title="Stream的中间操作"></a>Stream的中间操作</h2><p><strong>Stream有很多中间操作，多个中间操作可以连接起来形成一个流水线，每一个中间操作就像流水线上的一个工人，每人工人都可以对流进行加工，加工后得到的结果还是一个流。</strong></p>
+<p><img src="/2019/03/30/java8Stream/liushui.jpg" alt></p>
+<p>以下是常用的中间操作列表:</p>
+<p><img src="/2019/03/30/java8Stream/streamapi.png" alt="img"></p>
+<p><strong>filter</strong></p>
+<p>filter 方法用于通过设置的条件过滤出元素。以下代码片段使用 filter 方法过滤掉空字符串：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; strings = Arrays.asList(&quot;Hollis&quot;, &quot;&quot;, &quot;HollisChuang&quot;, &quot;H&quot;, &quot;hollis&quot;);</span><br><span class="line">strings.stream().filter(string -&gt; !string.isEmpty()).forEach(System.out::println);</span><br><span class="line">//Hollis, , HollisChuang, H, hollis</span><br></pre></td></tr></table></figure>
+<p><strong>map</strong></p>
+<p>map 方法用于映射每个元素到对应的结果，以下代码片段使用 map 输出了元素对应的平方数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; numbers = Arrays.asList(3, 2, 2, 3, 7, 3, 5);</span><br><span class="line">numbers.stream().map( i -&gt; i*i).forEach(System.out::println);</span><br><span class="line">//9,4,4,9,49,9,25</span><br></pre></td></tr></table></figure>
+<p><strong>limit/skip</strong></p>
+<p>limit 返回 Stream 的前面 n 个元素；skip 则是扔掉前 n 个元素。以下代码片段使用 limit 方法保理4个元素：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; numbers = Arrays.asList(3, 2, 2, 3, 7, 3, 5);</span><br><span class="line">numbers.stream().limit(4).forEach(System.out::println);</span><br><span class="line">//3,2,2,3</span><br></pre></td></tr></table></figure>
+<p><strong>sorted</strong></p>
+<p>sorted 方法用于对流进行排序。以下代码片段使用 sorted 方法进行排序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; numbers = Arrays.asList(3, 2, 2, 3, 7, 3, 5);</span><br><span class="line">numbers.stream().sorted().forEach(System.out::println);</span><br><span class="line">//2,2,3,3,3,5,7</span><br></pre></td></tr></table></figure>
+<p><strong>distinct</strong></p>
+<p>distinct主要用来去重，以下代码片段使用 distinct 对元素进行去重：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; numbers = Arrays.asList(3, 2, 2, 3, 7, 3, 5);</span><br><span class="line">numbers.stream().distinct().forEach(System.out::println);</span><br><span class="line">//3,2,7,5</span><br></pre></td></tr></table></figure>
+<p>接下来我们通过一个例子和一张图，来演示下，当一个Stream先后通过filter、map、sort、limit以及distinct处理后会发生什么。</p>
+<p>代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; strings = Arrays.asList(&quot;Hollis&quot;, &quot;HollisChuang&quot;, &quot;hollis&quot;, &quot;Hello&quot;, &quot;HelloWorld&quot;, &quot;Hollis&quot;);</span><br><span class="line">Stream s = strings.stream().filter(string -&gt; string.length()&lt;= 6).map(String::length).sorted().limit(3)</span><br><span class="line">            .distinct();</span><br></pre></td></tr></table></figure>
+<p>过程及每一步得到的结果如下图：</p>
+<p><img src="/2019/03/30/java8Stream/last.png" alt="img"></p>
+<h2 id="Stream的最终操作"><a href="#Stream的最终操作" class="headerlink" title="Stream的最终操作"></a>Stream的最终操作</h2><p><strong>Stream的中间操作得到的结果还是一个Stream，那么如何把一个Stream转换成我们需要的类型呢？比如计算出流中元素的个数、将流装换成集合等。这就需要最终操作（terminal operation）</strong></p>
+<p><strong>最终操作会消耗流，产生一个最终结果。也就是说，在最终操作之后，不能再次使用流，也不能在使用任何中间操作，否则将抛出异常：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java.lang.IllegalStateException: stream has already been operated upon or closed</span><br></pre></td></tr></table></figure>
+<p>俗话说，“你永远不会两次踏入同一条河”也正是这个意思。</p>
+<p>常用的最终操作如下图：￼</p>
+<p><img src="/2019/03/30/java8Stream/last1.png" alt="img"></p>
+<p><strong>forEach</strong></p>
+<p>Stream 提供了方法 ‘forEach’ 来迭代流中的每个数据。以下代码片段使用 forEach 输出了10个随机数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Random random = new Random();</span><br><span class="line">random.ints().limit(10).forEach(System.out::println);</span><br></pre></td></tr></table></figure>
+<p><strong>count</strong></p>
+<p>count用来统计流中的元素个数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; strings = Arrays.asList(&quot;Hollis&quot;, &quot;HollisChuang&quot;, &quot;hollis&quot;,&quot;Hollis666&quot;, &quot;Hello&quot;, &quot;HelloWorld&quot;, &quot;Hollis&quot;);</span><br><span class="line">System.out.println(strings.stream().count());</span><br><span class="line">//7</span><br></pre></td></tr></table></figure>
+<p><strong>collect</strong></p>
+<p>collect就是一个归约操作，可以接受各种做法作为参数，将流中的元素累积成一个汇总结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; strings = Arrays.asList(&quot;Hollis&quot;, &quot;HollisChuang&quot;, &quot;hollis&quot;,&quot;Hollis666&quot;, &quot;Hello&quot;, &quot;HelloWorld&quot;, &quot;Hollis&quot;);</span><br><span class="line">strings  = strings.stream().filter(string -&gt; string.startsWith(&quot;Hollis&quot;)).collect(Collectors.toList());</span><br><span class="line">System.out.println(strings);</span><br><span class="line">//Hollis, HollisChuang, Hollis666, Hollis</span><br></pre></td></tr></table></figure>
+<p>接下来，我们还是使用一张图，来演示下，前文的例子中，当一个Stream先后通过filter、map、sort、limit以及distinct处理后会，在分别使用不同的最终操作可以得到怎样的结果。</p>
+<p>下图，展示了文中介绍的所有操作的位置、输入、输出以及使用一个案例展示了其结果。</p>
+<p><img src="/2019/03/30/java8Stream/last2.jpg" alt="img"></p>
+<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><p><strong>本文介绍了Java 8中的Stream 的用途，优点等。还接受了Stream的几种用法，分别是Stream创建、中间操作和最终操作。</strong></p>
+<p><strong>Stream的创建有两种方式，分别是通过集合类的stream方法、通过Stream的of方法。</strong></p>
+<p><strong>Stream的中间操作可以用来处理Stream，中间操作的输入和输出都是Stream，中间操作可以是过滤、转换、排序等。</strong></p>
+<p><strong>Stream的最终操作可以将Stream转成其他形式，如计算出流中元素的个数、将流装换成集合、以及元素的遍历等。</strong></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+	
+	<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-heart"></i>感谢阅读-------------</div>
+    
+</div>
+  
+	</div>
+	
+	
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java8/" rel="tag"># java8</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/01/java8date/" rel="prev" title="JAVA8 新的时间和日期API">
+                JAVA8 新的时间和日期API <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Zippo">
+            
+              <p class="site-author-name" itemprop="name">Zippo</p>
+              <div class="site-description motion-element" itemprop="description">从一而终，认真且怂</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/WithYouZP" title="GitHub &rarr; https://github.com/WithYouZP" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/2279055065@qq.com" title="E-Mail &rarr; 2279055065@qq.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://weibo.com/u/5413833287?topnav=1&wvr=6&topsug=1&is_hot=1" title="Weibo &rarr; https://weibo.com/u/5413833287?topnav=1&wvr=6&topsug=1&is_hot=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Stream"><span class="nav-number">1.</span> <span class="nav-text">Stream</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream是什么？"><span class="nav-number">1.1.</span> <span class="nav-text">Stream是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何使用Stream"><span class="nav-number">1.2.</span> <span class="nav-text">如何使用Stream?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream的中间操作"><span class="nav-number">1.3.</span> <span class="nav-text">Stream的中间操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream的最终操作"><span class="nav-number">1.4.</span> <span class="nav-text">Stream的最终操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结："><span class="nav-number">1.5.</span> <span class="nav-text">总结：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+  <-- <i class="fa fa-user"> -->
+	<i class="fa fa-heart"></i>
+  </--></span>
+  <span class="author" itemprop="copyrightHolder">Zippo</span>
+
+  
+
+  
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.1</div>
+-->
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

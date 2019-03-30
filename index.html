@@ -423,7 +423,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-03-27 17:00:56" itemprop="dateModified" datetime="2019-03-27T17:00:56+08:00">2019-03-27</time>
+                <time title="修改时间：2019-03-27 17:03:35" itemprop="dateModified" datetime="2019-03-27T17:03:35+08:00">2019-03-27</time>
               
             
           </span>
@@ -520,6 +520,174 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/30/java8Stream/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zippo">
+      <meta itemprop="description" content="从一而终，认真且怂">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="夜阑卧听风吹雨的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/03/30/java8Stream/" class="post-title-link" itemprop="url">JAVA8使用Stream处理集合</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-30 11:09:00 / 修改时间：12:13:20" itemprop="dateCreated datePublished" datetime="2019-03-30T11:09:00+08:00">2019-03-30</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h1><h2 id="Stream是什么？"><a href="#Stream是什么？" class="headerlink" title="Stream是什么？"></a>Stream是什么？</h2><p><strong>Stream 使用一种类似用 SQL 语句从数据库查询数据的直观方式来提供一种对 Java 集合运算和表达的高阶抽象</strong>。</p>
+<p>Stream API可以极大提高Java程序员的生产力，让程序员写出高效率、干净、简洁的代码。</p>
+<p>这种风格将要处理的元素集合看作一种流，流在管道中传输，并且可以在管道的节点上进行处理，比如筛选，排序，聚合等。</p>
+<p>Stream有以下特性及优点：</p>
+<ul>
+<li>无存储。Stream不是一种数据结构，它只是某种数据源的一个视图，数据源可以是一个数组，Java容器或I/O channel等。</li>
+<li>为函数式编程而生。对Stream的任何修改都不会修改背后的数据源，比如对Stream执行过滤操作并不会删除被过滤的元素，而是会产生一个不包含被过滤元素的新Stream。</li>
+<li>惰式执行。Stream上的操作并不会立即执行，只有等到用户真正需要结果的时候才会执行。</li>
+<li>可消费性。Stream只能被“消费”一次，一旦遍历过就会失效，就像容器的迭代器那样，想要再次遍历必须重新生成。</li>
+</ul>
+<p>我们举一个例子，来看一下到底Stream可以做什么事情：</p>
+<p><img src="/2019/03/30/java8Stream/java8stream.png" alt></p>
+<p>上面的例子中，获取一些带颜色塑料球作为数据源，首先过滤掉红色的、把它们融化成随机的三角形。再过滤器并删除小的三角形。最后计算出剩余图形的周长。</p>
+<p>如上图，对于流的处理，主要有三种关键性操作：分别是流的创建、中间操作（intermediate operation）以及最终操作(terminal operation)。</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/03/30/java8Stream/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+	
+	<div>
+  
+	</div>
+	
+	
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -564,7 +732,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-count">2</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
