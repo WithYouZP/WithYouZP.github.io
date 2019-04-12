@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前几天写过一篇，java8 date 的文章，今天项目弄完了。学以致用，这里自己封装了一个工具类">
+<meta name="keywords" content="java8 date">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java8工具类">
+<meta property="og:url" content="http://yoursite.com/2019/04/03/java8工具类/index.html">
+<meta property="og:site_name" content="夜阑卧听风吹雨的博客">
+<meta property="og:description" content="前几天写过一篇，java8 date 的文章，今天项目弄完了。学以致用，这里自己封装了一个工具类">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-04-12T03:18:12.900Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java8工具类">
+<meta name="twitter:description" content="前几天写过一篇，java8 date 的文章，今天项目弄完了。学以致用，这里自己封装了一个工具类">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="夜阑卧听风吹雨的博客" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/03/java8工具类/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>java8工具类 | 夜阑卧听风吹雨的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">夜阑卧听风吹雨的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">心中有丘壑，眉目做山河</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/03/java8工具类/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zippo">
+      <meta itemprop="description" content="从一而终，认真且怂">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="夜阑卧听风吹雨的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">java8工具类
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-03 15:17:42" itemprop="dateCreated datePublished" datetime="2019-04-03T15:17:42+08:00">2019-04-03</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-04-12 11:18:12" itemprop="dateModified" datetime="2019-04-12T11:18:12+08:00">2019-04-12</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>前几天写过一篇，java8 date 的文章，今天项目弄完了。学以致用，这里自己封装了一个工具类</p>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br><span class="line">456</span><br><span class="line">457</span><br><span class="line">458</span><br><span class="line">459</span><br><span class="line">460</span><br><span class="line">461</span><br><span class="line">462</span><br><span class="line">463</span><br><span class="line">464</span><br><span class="line">465</span><br><span class="line">466</span><br><span class="line">467</span><br><span class="line">468</span><br><span class="line">469</span><br><span class="line">470</span><br><span class="line">471</span><br><span class="line">472</span><br><span class="line">473</span><br><span class="line">474</span><br><span class="line">475</span><br><span class="line">476</span><br><span class="line">477</span><br><span class="line">478</span><br><span class="line">479</span><br><span class="line">480</span><br><span class="line">481</span><br><span class="line">482</span><br><span class="line">483</span><br><span class="line">484</span><br><span class="line">485</span><br><span class="line">486</span><br><span class="line">487</span><br><span class="line">488</span><br><span class="line">489</span><br><span class="line">490</span><br><span class="line">491</span><br><span class="line">492</span><br><span class="line">493</span><br><span class="line">494</span><br><span class="line">495</span><br><span class="line">496</span><br><span class="line">497</span><br><span class="line">498</span><br><span class="line">499</span><br><span class="line">500</span><br><span class="line">501</span><br><span class="line">502</span><br><span class="line">503</span><br><span class="line">504</span><br><span class="line">505</span><br><span class="line">506</span><br><span class="line">507</span><br><span class="line">508</span><br><span class="line">509</span><br><span class="line">510</span><br><span class="line">511</span><br><span class="line">512</span><br><span class="line">513</span><br><span class="line">514</span><br><span class="line">515</span><br><span class="line">516</span><br><span class="line">517</span><br><span class="line">518</span><br><span class="line">519</span><br><span class="line">520</span><br><span class="line">521</span><br><span class="line">522</span><br><span class="line">523</span><br><span class="line">524</span><br><span class="line">525</span><br><span class="line">526</span><br><span class="line">527</span><br><span class="line">528</span><br><span class="line">529</span><br><span class="line">530</span><br><span class="line">531</span><br><span class="line">532</span><br><span class="line">533</span><br><span class="line">534</span><br><span class="line">535</span><br><span class="line">536</span><br><span class="line">537</span><br><span class="line">538</span><br><span class="line">539</span><br><span class="line">540</span><br><span class="line">541</span><br><span class="line">542</span><br><span class="line">543</span><br><span class="line">544</span><br><span class="line">545</span><br><span class="line">546</span><br><span class="line">547</span><br><span class="line">548</span><br><span class="line">549</span><br><span class="line">550</span><br><span class="line">551</span><br><span class="line">552</span><br><span class="line">553</span><br><span class="line">554</span><br><span class="line">555</span><br><span class="line">556</span><br><span class="line">557</span><br><span class="line">558</span><br><span class="line">559</span><br><span class="line">560</span><br><span class="line">561</span><br><span class="line">562</span><br><span class="line">563</span><br><span class="line">564</span><br><span class="line">565</span><br><span class="line">566</span><br><span class="line">567</span><br><span class="line">568</span><br><span class="line">569</span><br><span class="line">570</span><br><span class="line">571</span><br><span class="line">572</span><br><span class="line">573</span><br><span class="line">574</span><br><span class="line">575</span><br><span class="line">576</span><br><span class="line">577</span><br><span class="line">578</span><br><span class="line">579</span><br><span class="line">580</span><br><span class="line">581</span><br><span class="line">582</span><br><span class="line">583</span><br><span class="line">584</span><br><span class="line">585</span><br><span class="line">586</span><br><span class="line">587</span><br><span class="line">588</span><br><span class="line">589</span><br><span class="line">590</span><br><span class="line">591</span><br><span class="line">592</span><br><span class="line">593</span><br><span class="line">594</span><br><span class="line">595</span><br><span class="line">596</span><br><span class="line">597</span><br><span class="line">598</span><br><span class="line">599</span><br><span class="line">600</span><br><span class="line">601</span><br><span class="line">602</span><br><span class="line">603</span><br><span class="line">604</span><br><span class="line">605</span><br><span class="line">606</span><br><span class="line">607</span><br><span class="line">608</span><br><span class="line">609</span><br><span class="line">610</span><br><span class="line">611</span><br><span class="line">612</span><br><span class="line">613</span><br><span class="line">614</span><br><span class="line">615</span><br><span class="line">616</span><br><span class="line">617</span><br><span class="line">618</span><br><span class="line">619</span><br><span class="line">620</span><br><span class="line">621</span><br><span class="line">622</span><br><span class="line">623</span><br><span class="line">624</span><br><span class="line">625</span><br><span class="line">626</span><br><span class="line">627</span><br><span class="line">628</span><br><span class="line">629</span><br><span class="line">630</span><br><span class="line">631</span><br><span class="line">632</span><br><span class="line">633</span><br><span class="line">634</span><br><span class="line">635</span><br><span class="line">636</span><br><span class="line">637</span><br><span class="line">638</span><br><span class="line">639</span><br><span class="line">640</span><br><span class="line">641</span><br><span class="line">642</span><br><span class="line">643</span><br><span class="line">644</span><br><span class="line">645</span><br><span class="line">646</span><br><span class="line">647</span><br><span class="line">648</span><br><span class="line">649</span><br><span class="line">650</span><br><span class="line">651</span><br><span class="line">652</span><br><span class="line">653</span><br><span class="line">654</span><br><span class="line">655</span><br><span class="line">656</span><br><span class="line">657</span><br><span class="line">658</span><br><span class="line">659</span><br><span class="line">660</span><br><span class="line">661</span><br><span class="line">662</span><br><span class="line">663</span><br><span class="line">664</span><br><span class="line">665</span><br><span class="line">666</span><br><span class="line">667</span><br><span class="line">668</span><br><span class="line">669</span><br><span class="line">670</span><br><span class="line">671</span><br><span class="line">672</span><br><span class="line">673</span><br><span class="line">674</span><br><span class="line">675</span><br><span class="line">676</span><br><span class="line">677</span><br><span class="line">678</span><br><span class="line">679</span><br><span class="line">680</span><br><span class="line">681</span><br><span class="line">682</span><br><span class="line">683</span><br><span class="line">684</span><br><span class="line">685</span><br><span class="line">686</span><br><span class="line">687</span><br><span class="line">688</span><br><span class="line">689</span><br><span class="line">690</span><br><span class="line">691</span><br><span class="line">692</span><br><span class="line">693</span><br><span class="line">694</span><br><span class="line">695</span><br><span class="line">696</span><br><span class="line">697</span><br><span class="line">698</span><br><span class="line">699</span><br><span class="line">700</span><br><span class="line">701</span><br><span class="line">702</span><br><span class="line">703</span><br><span class="line">704</span><br><span class="line">705</span><br><span class="line">706</span><br><span class="line">707</span><br><span class="line">708</span><br><span class="line">709</span><br><span class="line">710</span><br><span class="line">711</span><br><span class="line">712</span><br><span class="line">713</span><br><span class="line">714</span><br><span class="line">715</span><br><span class="line">716</span><br><span class="line">717</span><br><span class="line">718</span><br><span class="line">719</span><br><span class="line">720</span><br><span class="line">721</span><br><span class="line">722</span><br><span class="line">723</span><br><span class="line">724</span><br><span class="line">725</span><br><span class="line">726</span><br><span class="line">727</span><br><span class="line">728</span><br><span class="line">729</span><br><span class="line">730</span><br><span class="line">731</span><br><span class="line">732</span><br><span class="line">733</span><br><span class="line">734</span><br><span class="line">735</span><br><span class="line">736</span><br><span class="line">737</span><br><span class="line">738</span><br><span class="line">739</span><br><span class="line">740</span><br><span class="line">741</span><br><span class="line">742</span><br><span class="line">743</span><br><span class="line">744</span><br><span class="line">745</span><br><span class="line">746</span><br><span class="line">747</span><br><span class="line">748</span><br><span class="line">749</span><br><span class="line">750</span><br><span class="line">751</span><br><span class="line">752</span><br><span class="line">753</span><br><span class="line">754</span><br><span class="line">755</span><br><span class="line">756</span><br><span class="line">757</span><br><span class="line">758</span><br><span class="line">759</span><br><span class="line">760</span><br><span class="line">761</span><br><span class="line">762</span><br><span class="line">763</span><br><span class="line">764</span><br><span class="line">765</span><br><span class="line">766</span><br><span class="line">767</span><br><span class="line">768</span><br><span class="line">769</span><br><span class="line">770</span><br><span class="line">771</span><br><span class="line">772</span><br><span class="line">773</span><br><span class="line">774</span><br><span class="line">775</span><br><span class="line">776</span><br><span class="line">777</span><br><span class="line">778</span><br><span class="line">779</span><br><span class="line">780</span><br><span class="line">781</span><br><span class="line">782</span><br><span class="line">783</span><br><span class="line">784</span><br><span class="line">785</span><br><span class="line">786</span><br><span class="line">787</span><br><span class="line">788</span><br><span class="line">789</span><br><span class="line">790</span><br><span class="line">791</span><br><span class="line">792</span><br><span class="line">793</span><br><span class="line">794</span><br><span class="line">795</span><br><span class="line">796</span><br><span class="line">797</span><br><span class="line">798</span><br><span class="line">799</span><br><span class="line">800</span><br><span class="line">801</span><br><span class="line">802</span><br><span class="line">803</span><br><span class="line">804</span><br><span class="line">805</span><br><span class="line">806</span><br><span class="line">807</span><br><span class="line">808</span><br><span class="line">809</span><br><span class="line">810</span><br><span class="line">811</span><br><span class="line">812</span><br><span class="line">813</span><br><span class="line">814</span><br><span class="line">815</span><br><span class="line">816</span><br><span class="line">817</span><br><span class="line">818</span><br><span class="line">819</span><br><span class="line">820</span><br><span class="line">821</span><br><span class="line">822</span><br><span class="line">823</span><br><span class="line">824</span><br><span class="line">825</span><br><span class="line">826</span><br><span class="line">827</span><br><span class="line">828</span><br><span class="line">829</span><br><span class="line">830</span><br><span class="line">831</span><br><span class="line">832</span><br><span class="line">833</span><br><span class="line">834</span><br><span class="line">835</span><br><span class="line">836</span><br><span class="line">837</span><br><span class="line">838</span><br><span class="line">839</span><br><span class="line">840</span><br><span class="line">841</span><br><span class="line">842</span><br><span class="line">843</span><br><span class="line">844</span><br><span class="line">845</span><br><span class="line">846</span><br><span class="line">847</span><br><span class="line">848</span><br><span class="line">849</span><br><span class="line">850</span><br><span class="line">851</span><br><span class="line">852</span><br><span class="line">853</span><br><span class="line">854</span><br><span class="line">855</span><br><span class="line">856</span><br><span class="line">857</span><br><span class="line">858</span><br><span class="line">859</span><br><span class="line">860</span><br><span class="line">861</span><br><span class="line">862</span><br><span class="line">863</span><br><span class="line">864</span><br><span class="line">865</span><br><span class="line">866</span><br><span class="line">867</span><br><span class="line">868</span><br><span class="line">869</span><br><span class="line">870</span><br><span class="line">871</span><br><span class="line">872</span><br><span class="line">873</span><br><span class="line">874</span><br><span class="line">875</span><br><span class="line">876</span><br><span class="line">877</span><br><span class="line">878</span><br></pre></td><td class="code"><pre><span class="line">public class DateUtil &#123;</span><br><span class="line">    public static final String STANDARD_TIME_FORMAT = &quot;yyyy:MM:dd HH:mm:ss&quot;;</span><br><span class="line">    public static final String STANDARD_DATE_FORMAT = &quot;yyyy:MM:dd&quot;;</span><br><span class="line">    public static final String STANDARD_DATE_FORMAT2 = &quot;yyyy-MM-dd&quot;;</span><br><span class="line">    /**</span><br><span class="line">     * 标准日期格式</span><br><span class="line">     */</span><br><span class="line">    public static final String STANDARD_TIME_FORMAT2 = &quot;yyyy-MM-dd HH:mm:ss&quot;;</span><br><span class="line"></span><br><span class="line">    public static final String STANDARD_TIME_FORMAT3 = &quot;yyyy-MM-dd HH:mm&quot;;</span><br><span class="line"></span><br><span class="line">    public static final String STANDARD_TIME_FORMAT4 = &quot;yyyyMMdd&quot;;</span><br><span class="line">    </span><br><span class="line">    public static final String STANDARD_TIME_FORMAT5 = &quot;yyyyMMddHHmmssSSS&quot;;</span><br><span class="line">    /**</span><br><span class="line">     * 标准日期月格式</span><br><span class="line">     */</span><br><span class="line">    public static final String STANDARD_MONTH_FORMAT = &quot;yyyy-MM&quot;;</span><br><span class="line">    </span><br><span class="line">    public static final String ISO_TIME_FORMAT = &quot;yyyy-MM-dd&apos;T&apos;HH:mm:ss.SSS&apos;Z&apos;&quot;;</span><br><span class="line"></span><br><span class="line">    private static String[] weekDays = &#123;&quot;星期日&quot;, &quot;星期一&quot;, &quot;星期二&quot;, &quot;星期三&quot;, &quot;星期四&quot;, &quot;星期五&quot;, &quot;星期六&quot;&#125;;</span><br><span class="line">    </span><br><span class="line">    private static int sequence = 0;</span><br><span class="line">   </span><br><span class="line">    private static int length = 6;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 得到星期几</span><br><span class="line">     *</span><br><span class="line">     * @param date</span><br><span class="line">     * @return</span><br><span class="line">     * @date 2018年8月25日</span><br><span class="line">     * @author zp</span><br><span class="line">     */</span><br><span class="line">    public static String getWeekByDate(Date date) &#123;</span><br><span class="line">        int w = getWeekInt(date) - 1;</span><br><span class="line">        if (w &lt; 0) &#123;</span><br><span class="line">         w = 0;</span><br><span class="line">      &#125;</span><br><span class="line">        return weekDays[w];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 返回星期几的int</span><br><span class="line">     *</span><br><span class="line">     * @param date</span><br><span class="line">     * @return</span><br><span class="line">     * @date 2018年8月25日</span><br><span class="line">     * @author zp</span><br><span class="line">     */</span><br><span class="line">    public static int getWeekInt(Date date) &#123;</span><br><span class="line">        Calendar cal = Calendar.getInstance();</span><br><span class="line">        cal.setTime(date);</span><br><span class="line">        int w = cal.get(Calendar.DAY_OF_WEEK);</span><br><span class="line">        return w;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 得到今天是几号</span><br><span class="line">     *</span><br><span class="line">     * @param date</span><br><span class="line">     * @return</span><br><span class="line">     * @date 2018年8月25日</span><br><span class="line">     * @author zp</span><br><span class="line">     */</span><br><span class="line">    public static int getDayNum(Date date) &#123;</span><br><span class="line">        Calendar cal = Calendar.getInstance();</span><br><span class="line">        cal.setTime(date);</span><br><span class="line">        return cal.get(Calendar.DATE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 根据传入日期、得到当天日期当天的起始时间</span><br><span class="line">     * </span><br><span class="line">     * @param date</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public static Date getToday(Date date) &#123;</span><br><span class="line">        Calendar cal = Calendar.getInstance();</span><br><span class="line">        cal.setTime(date);</span><br><span class="line">        cal.set(Calendar.HOUR_OF_DAY, 0);</span><br><span class="line">        cal.set(Calendar.MINUTE, 0);</span><br><span class="line">        cal.set(Calendar.SECOND, 0);</span><br><span class="line">        cal.set(Calendar.MILLISECOND, 0);</span><br><span class="line">        return cal.getTime();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 根据传入日期、得到前一天的起始时间</span><br><span class="line">     * </span><br><span class="line">     * @param date</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public static Date getYesterday(Date date) &#123;</span><br><span class="line">        Calendar cal = Calendar.getInstance();</span><br><span class="line">        cal.setTime(date);</span><br><span class="line">        cal.add(Calendar.DAY_OF_MONTH, -1);</span><br><span class="line">        return cal.getTime();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 根据传入日期、得到当前日期所在星期的开始时间</span><br><span class="line">     * </span><br><span class="line">     * @param date</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public static Date getThisWeekDay(Date date) &#123;</span><br><span class="line">        Calendar cal = Calendar.getInstance();</span><br><span class="line">        cal.setTime(date);</span><br><span class="line">        // 从周一开始算</span><br><span class="line">        int dayWeek = cal.get(Calendar.DAY_OF_WEEK);</span><br><span class="line">        if (dayWeek == 1) &#123;</span><br><span class="line">            cal.add(Calendar.DATE, -1);</span><br><span class="line">        &#125;</span><br><span class="line">        cal.set(Calendar.DAY_OF_WEEK, 2);</span><br><span class="line">        cal.set(Calendar.HOUR_OF_DAY, 0);</span><br><span class="line">        cal.set(Calendar.MINUTE, 0);</span><br><span class="line">        cal.set(Calendar.SECOND, 0);</span><br><span class="line">        cal.set(Calendar.MILLISECOND, 1);</span><br><span class="line">        return cal.getTime();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取当周结束时间</span><br><span class="line">     *</span><br><span class="line">     * @param date</span><br><span class="line">     * @return</span><br><span class="line">     * @date 2018年8月25日</span><br><span class="line">     * @author zp</span><br><span class="line">     */</span><br><span class="line">    public static Date getThisWeekEnd(Date date) &#123;</span><br><span class="line">        Calendar currentDate = Calendar.getInstance();</span><br><span class="line">        currentDate.setTime(date);</span><br><span class="line">        currentDate.setFirstDayOfWeek(Calendar.MONDAY);</span><br><span class="line">        currentDate.set(Calendar.HOUR_OF_DAY, 23);</span><br><span class="line">        currentDate.set(Calendar.MINUTE, 59);</span><br><span class="line">        currentDate.set(Calendar.SECOND, 59);</span><br><span class="line">        currentDate.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);</span><br><span class="line">        return currentDate.getTime();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 根据传入日期、得到当前日期所在月份的开始时间</span><br><span class="line">     * </span><br><span class="line">     * @param date</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public static Date getThisMonthDay(Date date) &#123;</span><br><span class="line">        Calendar cal = Calendar.getInstance();</span><br><span class="line">        cal.setTime(date);</span><br><span class="line">        cal.set(Calendar.DAY_OF_MONTH, 1);</span><br><span class="line">        cal.set(Calendar.HOUR_OF_DAY, 0);</span><br><span class="line">        cal.set(Calendar.MINUTE, 0);</span><br><span class="line">        cal.set(Calendar.SECOND, 0);</span><br><span class="line">        cal.set(Calendar.MILLISECOND, 2);</span><br><span class="line">        return cal.getTime();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取当月最后一天</span><br><span class="line">     *</span><br><span class="line">     * @param date</span><br><span class="line">     * @return</span><br><span class="line">     * @date 2018年8月25日</span><br><span class="line">     * @author zp</span><br><span class="line">     */</span><br><span class="line">    public static Date getThisMonthLastDate(Date date) &#123;</span><br><span class="line">        Calendar cal = Calendar.getInstance();</span><br><span class="line">        cal.setTime(date);</span><br><span class="line">        cal.set(Calendar.DAY_OF_MONTH, 1);// 设置为1号,当前日期既为本月第一天</span><br><span class="line">        cal.add(Calendar.MONTH, 1);// 月增加1天</span><br><span class="line">        cal.add(Calendar.DAY_OF_MONTH, -1);// 日期倒数一日,既得到本月最后一天</span><br><span class="line">        cal.set(Calendar.HOUR_OF_DAY, 23);</span><br><span class="line">        cal.set(Calendar.MINUTE, 59);</span><br><span class="line">        cal.set(Calendar.SECOND, 59);</span><br><span class="line">        return cal.getTime();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 根据传入日期、得到当前日期所在季度的开始时间</span><br><span class="line">     * </span><br><span class="line">     * @param date</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public static Date getThisSeasonDay(Date date) &#123;</span><br><span class="line">        Calendar cal = Calendar.getInstance();</span><br><span class="line">        cal.setTime(date);</span><br><span class="line">        int month = cal.get(Calendar.MONTH);</span><br><span class="line">        int season = (month + 1 + 4) / 4;</span><br><span class="line">        switch (season) &#123;</span><br><span class="line">            case 1:</span><br><span class="line">                cal.set(Calendar.MONTH, Calendar.JANUARY);</span><br><span class="line">                break;</span><br><span class="line">            case 2:</span><br><span class="line">                cal.set(Calendar.MONTH, Calendar.APRIL);</span><br><span class="line">                break;</span><br><span class="line">            case 3:</span><br><span class="line">                cal.set(Calendar.MONTH, Calendar.JULY);</span><br><span class="line">                break;</span><br><span class="line">            case 4:</span><br><span class="line">                cal.set(Calendar.MONTH, Calendar.OCTOBER);</span><br><span class="line">                break;</span><br><span class="line">            default:</span><br><span class="line">               break;</span><br><span class="line">        &#125;</span><br><span class="line">        cal.set(Calendar.DAY_OF_MONTH, 1);</span><br><span class="line">        cal.set(Calendar.HOUR_OF_DAY, 0);</span><br><span class="line">        cal.set(Calendar.MINUTE, 0);</span><br><span class="line">        cal.set(Calendar.SECOND, 0);</span><br><span class="line">        cal.set(Calendar.MILLISECOND, 3);</span><br><span class="line">        return cal.getTime();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 根据传入日期、得到当前日期所在年份的开始时间</span><br><span class="line">     * </span><br><span class="line">     * @param date</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public static Date getThisYearDay(Date date) &#123;</span><br><span class="line">        Calendar cal = Calendar.getInstance();</span><br><span class="line">        cal.setTime(date);</span><br><span class="line">        cal.set(Calendar.DAY_OF_YEAR, 1);</span><br><span class="line">        cal.set(Calendar.HOUR_OF_DAY, 0);</span><br><span class="line">        cal.set(Calendar.MINUTE, 0);</span><br><span class="line">        cal.set(Calendar.SECOND, 0);</span><br><span class="line">        cal.set(Calendar.MILLISECOND, 4);</span><br><span class="line">        return cal.getTime();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 根据传入日期，得到当前日期7天前的日期</span><br><span class="line">     * </span><br><span class="line">     * @param date</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public static Date getLastSevenDays(Date date) &#123;</span><br><span class="line">        Calendar cal = Calendar.getInstance();</span><br><span class="line">        cal.setTime(date);</span><br><span class="line">        cal.add(Calendar.DAY_OF_YEAR, -7);</span><br><span class="line">        cal.set(Calendar.HOUR_OF_DAY, 0);</span><br><span class="line">        cal.set(Calendar.MINUTE, 0);</span><br><span class="line">        cal.set(Calendar.SECOND, 0);</span><br><span class="line">        cal.set(Calendar.MILLISECOND, 0);</span><br><span class="line">        return cal.getTime();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 根据传入日期，得到当前日期n天后的日期</span><br><span class="line">     * </span><br><span class="line">     * @param date</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public static Date getLastDays(Date date, int n) &#123;</span><br><span class="line">        Calendar cal = Calendar.getInstance();</span><br><span class="line">        cal.setTime(date);</span><br><span class="line">        cal.add(Calendar.DAY_OF_YEAR, n);</span><br><span class="line">        cal.set(Calendar.HOUR_OF_DAY, 0);</span><br><span class="line">        cal.set(Calendar.MINUTE, 0);</span><br><span class="line">        cal.set(Calendar.SECOND, 0);</span><br><span class="line">        cal.set(Calendar.MILLISECOND, 0);</span><br><span class="line">        return cal.getTime();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取日期是当年的第几周</span><br><span class="line">     *</span><br><span class="line">     * @param date</span><br><span class="line">     * @return</span><br><span class="line">     * @date 2018年8月25日</span><br><span class="line">     * @author zp</span><br><span class="line">     */</span><br><span class="line">    public static int getWeekOfDate(Date date) &#123;</span><br><span class="line">        Calendar ca = Calendar.getInstance();// 创建一个日期实例</span><br><span class="line">        ca.setTime(date);// 实例化一个日期</span><br><span class="line">        return ca.get(Calendar.WEEK_OF_YEAR);// 获取是第几周</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public static String getDateStr(Date date, String pattern) &#123;</span><br><span class="line">        SimpleDateFormat format = new SimpleDateFormat(pattern);</span><br><span class="line">        return format.format(date);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 格式化为标准日期格式(yyyy-MM-dd HH:mm:ss)的日期</span><br><span class="line">     * </span><br><span class="line">     * @param strDate 字符串日期</span><br><span class="line">     * @return 标准日期</span><br><span class="line">     */</span><br><span class="line">    public static Date getStandardStringDate(String strDate) &#123;</span><br><span class="line">        return getStringDate(strDate, STANDARD_TIME_FORMAT2);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 格式化为自定义的日期格式</span><br><span class="line">     * </span><br><span class="line">     * @param strDate 字符串日期</span><br><span class="line">     * @param strType 自定义的日期格式</span><br><span class="line">     * @return 自定义的日期</span><br><span class="line">     */</span><br><span class="line">    public static Date getStringDate(String strDate, String strType) &#123;</span><br><span class="line">        Date date = null;</span><br><span class="line"></span><br><span class="line">        SimpleDateFormat objSDF = new SimpleDateFormat(strType);</span><br><span class="line">        try &#123;</span><br><span class="line">            date = objSDF.parse(strDate);</span><br><span class="line">        &#125; catch (Exception e) &#123;&#125;</span><br><span class="line"></span><br><span class="line">        return date;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取当前格式化时间</span><br><span class="line">     * </span><br><span class="line">     * @return</span><br><span class="line">     * @date 2018年8月25日</span><br><span class="line">     * @author zp</span><br><span class="line">     */</span><br><span class="line">    public static String currTime() &#123;</span><br><span class="line">        SimpleDateFormat format = new SimpleDateFormat(STANDARD_TIME_FORMAT2);</span><br><span class="line">        return format.format(new Date());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static Date min(Date end, Date now) &#123;</span><br><span class="line">        int compare = end.compareTo(now);</span><br><span class="line">        return compare &gt; 0 ? now : end;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取日期当天的最后一秒的时间值</span><br><span class="line">     *</span><br><span class="line">     * 这里没设置到毫秒级别 ，原因是如果设置了毫秒数 比如： 2025-01-01 23:59:59.999 插入数据库后会自动变更为 2025-01-02 00:00:00.000</span><br><span class="line">     * ，如果在不考虑毫秒的情况下，将会出现1秒钟的误差，所以这里不设置毫秒数</span><br><span class="line">     * </span><br><span class="line">     * @param date</span><br><span class="line">     * @return</span><br><span class="line">     * @date 2018年8月25日</span><br><span class="line">     * @author zp</span><br><span class="line">     */</span><br><span class="line">    public static Date getLastSencond(Date date) &#123;</span><br><span class="line">        Calendar cal = Calendar.getInstance();</span><br><span class="line">        cal.setTime(date);</span><br><span class="line">        cal.set(Calendar.HOUR_OF_DAY, 23);</span><br><span class="line">        cal.set(Calendar.MINUTE, 59);</span><br><span class="line">        cal.set(Calendar.SECOND, 59);</span><br><span class="line"></span><br><span class="line">        return cal.getTime();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 生成一个当前时间，插入数据库时可能会多1秒，手动设置毫秒为0</span><br><span class="line">     *</span><br><span class="line">     * @return</span><br><span class="line">     * @date 2018年8月25日</span><br><span class="line">     * @author zp</span><br><span class="line">     */</span><br><span class="line">    public static Date getCurrDate() &#123;</span><br><span class="line">        Calendar cal = Calendar.getInstance();</span><br><span class="line">        cal.setTime(new Date());</span><br><span class="line"></span><br><span class="line">        cal.set(Calendar.MILLISECOND, 0);</span><br><span class="line">        return cal.getTime();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取某一天的最后一毫秒的日期值</span><br><span class="line">     * </span><br><span class="line">     * @param date</span><br><span class="line">     * @return</span><br><span class="line">     * @date 2018年8月25日</span><br><span class="line">     * @author zp</span><br><span class="line">     */</span><br><span class="line">    public static Date getLastMilliSecond(Date date) &#123;</span><br><span class="line">        Calendar cal = Calendar.getInstance();</span><br><span class="line">        cal.setTime(date);</span><br><span class="line">        cal.set(Calendar.HOUR_OF_DAY, 23);</span><br><span class="line">        cal.set(Calendar.MINUTE, 59);</span><br><span class="line">        cal.set(Calendar.SECOND, 59);</span><br><span class="line">        cal.set(Calendar.MILLISECOND, 999);</span><br><span class="line"></span><br><span class="line">        return cal.getTime();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取某天前一日的第一毫秒的日期值</span><br><span class="line">     * </span><br><span class="line">     * @date 2018年8月25日</span><br><span class="line">     * @author zp</span><br><span class="line">     * </span><br><span class="line">     * @param date</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public static Date getYesterdayStartTime(Date date) &#123;</span><br><span class="line">        Calendar cal = Calendar.getInstance();</span><br><span class="line">        cal.setTime(date);</span><br><span class="line">        cal.add(Calendar.DAY_OF_MONTH, -1);</span><br><span class="line">        cal.set(Calendar.HOUR_OF_DAY, 0);</span><br><span class="line">        cal.set(Calendar.MINUTE, 0);</span><br><span class="line">        cal.set(Calendar.SECOND, 0);</span><br><span class="line"></span><br><span class="line">        return cal.getTime();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取某天前一日的最后一毫秒的日期值</span><br><span class="line">     * </span><br><span class="line">     * @date 2018年8月25日</span><br><span class="line">     * @author zp</span><br><span class="line">     * </span><br><span class="line">     * @param date</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public static Date getYesterdayEndMillSecond(Date date) &#123;</span><br><span class="line">        Calendar cal = Calendar.getInstance();</span><br><span class="line">        cal.setTime(date);</span><br><span class="line">        cal.add(Calendar.DAY_OF_MONTH, -1);</span><br><span class="line">        cal.set(Calendar.HOUR_OF_DAY, 23);</span><br><span class="line">        cal.set(Calendar.MINUTE, 59);</span><br><span class="line">        cal.set(Calendar.SECOND, 59);</span><br><span class="line">        cal.set(Calendar.MILLISECOND, 999);</span><br><span class="line"></span><br><span class="line">        return cal.getTime();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取指定日期的0点0分的时间</span><br><span class="line">     * </span><br><span class="line">     * @param date</span><br><span class="line">     * @return</span><br><span class="line">     * @date 2018年8月25日</span><br><span class="line">     * @author zp</span><br><span class="line">     */</span><br><span class="line">    public static Date getBeginningOfDay(Date date) &#123;</span><br><span class="line">        return DateUtils.truncate(date, Calendar.DATE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取随机日期</span><br><span class="line">     * </span><br><span class="line">     * @param beginDate 起始日期，格式为：yyyy-MM-dd</span><br><span class="line">     * @param endDate 结束日期，格式为：yyyy-MM-dd</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line"></span><br><span class="line">    public static Date randomDate(String beginDate, String endDate) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            SimpleDateFormat format = new SimpleDateFormat(&quot;yyyy-MM-dd&quot;);</span><br><span class="line">            Date start = format.parse(beginDate);// 构造开始日期</span><br><span class="line">            Date end = format.parse(endDate);// 构造结束日期</span><br><span class="line">            // getTime()表示返回自 1970 年 1 月 1 日 00:00:00 GMT 以来此 Date 对象表示的毫秒数。</span><br><span class="line">            if (start.getTime() &gt;= end.getTime()) &#123;</span><br><span class="line">                return null;</span><br><span class="line">            &#125;</span><br><span class="line">            long date = random(start.getTime(), end.getTime());</span><br><span class="line"></span><br><span class="line">            return new Date(date);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取随机日期</span><br><span class="line">     * </span><br><span class="line">     * @param start 起始日期</span><br><span class="line">     * @param end 结束日期</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line"></span><br><span class="line">    public static Date randomDate(Date start, Date end) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            if (start.getTime() &gt;= end.getTime()) &#123;</span><br><span class="line">                return null;</span><br><span class="line">            &#125;</span><br><span class="line">            long date = random(start.getTime(), end.getTime());</span><br><span class="line"></span><br><span class="line">            return new Date(date);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static long random(long begin, long end) &#123;</span><br><span class="line">        long rtn = begin + (long) (Math.random() * (end - begin));</span><br><span class="line">        // 如果返回的是开始时间和结束时间，则递归调用本函数查找随机值</span><br><span class="line">        if (rtn == begin || rtn == end) &#123;</span><br><span class="line">            return random(begin, end);</span><br><span class="line">        &#125;</span><br><span class="line">        return rtn;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public static Date add(Date date, int type, int value) &#123;</span><br><span class="line">        Calendar calendar = Calendar.getInstance();</span><br><span class="line">        calendar.setTime(date);</span><br><span class="line">        calendar.add(type, value);</span><br><span class="line">        return calendar.getTime();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 日期加上月数的时间</span><br><span class="line">     * </span><br><span class="line">     * @param date</span><br><span class="line">     * @param month</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public static Date dateAddMonth(Date date, int month) &#123;</span><br><span class="line">        return add(date, Calendar.MONTH, month);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 日期加上天数的时间</span><br><span class="line">     * </span><br><span class="line">     * @param date</span><br><span class="line">     * @param day</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public static Date dateAddDay(Date date, int day) &#123;</span><br><span class="line">        return add(date, Calendar.DAY_OF_YEAR, day);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 日期加上年数的时间</span><br><span class="line">     * </span><br><span class="line">     * @param date</span><br><span class="line">     * @param year</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public static Date dateAddYear(Date date, int year) &#123;</span><br><span class="line">        return add(date, Calendar.YEAR, year);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    /**</span><br><span class="line">     * 日期加上秒的时间</span><br><span class="line">     * </span><br><span class="line">     * @param date</span><br><span class="line">     * @param year</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public static Date dateAddSecond(Date date, int second) &#123;</span><br><span class="line">       return add(date, Calendar.SECOND, second);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 判斷一個字符串是不是日期格式</span><br><span class="line">     *</span><br><span class="line">     * @param str</span><br><span class="line">     * @return</span><br><span class="line">     * @date 2018年8月25日</span><br><span class="line">     * @author zp</span><br><span class="line">     */</span><br><span class="line">    public static boolean isValidDate(String str) &#123;</span><br><span class="line">        boolean convertSuccess = true;</span><br><span class="line">        // 指定日期格式为四位年/两位月份/两位日期，注意yyyy/MM/dd区分大小写；</span><br><span class="line">        SimpleDateFormat format = new SimpleDateFormat(STANDARD_DATE_FORMAT2);</span><br><span class="line">        try &#123;</span><br><span class="line">            // 设置lenient为false. 否则SimpleDateFormat会比较宽松地验证日期，比如2007/02/29会被接受，并转换成2007/03/01</span><br><span class="line">            format.setLenient(false);</span><br><span class="line">            format.parse(str);</span><br><span class="line">        &#125; catch (ParseException e) &#123;</span><br><span class="line">            // e.printStackTrace();</span><br><span class="line">            // 如果throw java.text.ParseException或者NullPointerException，就说明格式不对</span><br><span class="line">            convertSuccess = false;</span><br><span class="line">        &#125;</span><br><span class="line">        return convertSuccess;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取当月的 天数</span><br><span class="line">     * */</span><br><span class="line">    public static int getCurrentMonthDay() &#123;</span><br><span class="line"></span><br><span class="line">        Calendar a = Calendar.getInstance();</span><br><span class="line">        a.set(Calendar.DATE, 1);</span><br><span class="line">        a.roll(Calendar.DATE, -1);</span><br><span class="line">        int maxDate = a.get(Calendar.DATE);</span><br><span class="line">        return maxDate;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 日期转字符串</span><br><span class="line">     * </span><br><span class="line">     * @param date</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public static String formatDate(Date date) &#123;</span><br><span class="line">        return formatDate(date, STANDARD_TIME_FORMAT2);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 日期转字符串</span><br><span class="line">     * </span><br><span class="line">     * @param date</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public static String formatDate(Date date, String pattern) &#123;</span><br><span class="line">        if (date != null) &#123;</span><br><span class="line">            SimpleDateFormat format = new SimpleDateFormat(pattern);</span><br><span class="line">            return format.format(date);</span><br><span class="line">        &#125;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 得到时间戳,确保date为&quot;yyyy-MM-dd HH:mm:ss&quot;格式</span><br><span class="line">     * </span><br><span class="line">     * @param date</span><br><span class="line">     */</span><br><span class="line">    public static Long getTimestamp(String date) &#123;</span><br><span class="line">        return getStandardStringDate(date).getTime();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 根据年份和月份获取当前月的最大天数</span><br><span class="line">     * </span><br><span class="line">     * @author zp</span><br><span class="line">     * @date 2018年8月25日</span><br><span class="line">     * @param year</span><br><span class="line">     * @param month</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public static int getMaxDateByYearAndMonth(int year, int month) &#123;</span><br><span class="line">        Calendar cal = Calendar.getInstance(Locale.CHINA);</span><br><span class="line">        cal.set(Calendar.YEAR, year);</span><br><span class="line">        cal.set(Calendar.MONTH, month - 1);</span><br><span class="line">        return cal.getActualMaximum(Calendar.DATE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     *</span><br><span class="line">     * @Title: getNatureMonthDate</span><br><span class="line">     * @Description: 获得几个自然月内最后时间</span><br><span class="line">     * @param @param date</span><br><span class="line">     * @param @param monthNum</span><br><span class="line">     * @param @return 设定文件</span><br><span class="line">     * @return Date 返回类型</span><br><span class="line">     * @throws</span><br><span class="line">     */</span><br><span class="line">    public static Date getNatureMonthDate(Date date, int monthNum) &#123;</span><br><span class="line">        Calendar cal = Calendar.getInstance();</span><br><span class="line">        cal.setTime(date);</span><br><span class="line">        cal.set(Calendar.DAY_OF_MONTH, 1);// 设置为1号,当前日期既为本月第一天</span><br><span class="line">        cal.add(Calendar.MONTH, monthNum);// 月增加 几个月</span><br><span class="line">        cal.add(Calendar.DAY_OF_MONTH, -1);// 日期倒数一日,既得到本月最后一天</span><br><span class="line">        cal.set(Calendar.HOUR_OF_DAY, 23);</span><br><span class="line">        cal.set(Calendar.MINUTE, 59);</span><br><span class="line">        cal.set(Calendar.SECOND, 59);</span><br><span class="line">        return cal.getTime();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 计算两个日期见相差多少天</span><br><span class="line">     *</span><br><span class="line">     * @param startDate</span><br><span class="line">     * @param endDate</span><br><span class="line">     * @return</span><br><span class="line">     * @throws ParseException</span><br><span class="line">     * @date 2018年8月25日</span><br><span class="line">     * @author zp</span><br><span class="line">     */</span><br><span class="line">    public static int daysBetween(Date startDate, Date endDate) &#123;</span><br><span class="line">        SimpleDateFormat sdf = new SimpleDateFormat(STANDARD_DATE_FORMAT2);</span><br><span class="line">        try &#123;</span><br><span class="line">            startDate = sdf.parse(sdf.format(startDate));</span><br><span class="line">            endDate = sdf.parse(sdf.format(endDate));</span><br><span class="line">        &#125; catch (ParseException e) &#123;&#125;</span><br><span class="line"></span><br><span class="line">        Calendar cal = Calendar.getInstance();</span><br><span class="line"></span><br><span class="line">        cal.setTime(startDate);</span><br><span class="line">        long time1 = cal.getTimeInMillis();</span><br><span class="line"></span><br><span class="line">        cal.setTime(endDate);</span><br><span class="line">        long time2 = cal.getTimeInMillis();</span><br><span class="line"></span><br><span class="line">        long betweenDays = (time2 - time1) / (1000 * 3600 * 24);</span><br><span class="line"></span><br><span class="line">        return Integer.parseInt(String.valueOf(betweenDays));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    /**</span><br><span class="line">     * 根据样式获取日期的字符串</span><br><span class="line">     * @param pattern</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public static String getDateStr(String pattern) &#123;</span><br><span class="line">        SimpleDateFormat sdf=new SimpleDateFormat(pattern);</span><br><span class="line">        return sdf.format(new Date());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    private static String unitFormat(int i) &#123;</span><br><span class="line">        String retStr = null;</span><br><span class="line">        if (i &gt;= 0 &amp;&amp; i &lt; 10)</span><br><span class="line">            retStr = &quot;0&quot; + Integer.toString(i);</span><br><span class="line">        else</span><br><span class="line">            retStr = &quot;&quot; + i;</span><br><span class="line">        return retStr;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * </span><br><span class="line">     * @功能描述: int 转换为&quot;20:59:30&quot; </span><br><span class="line">     * @param time</span><br><span class="line">     * @return</span><br><span class="line">     * @throws Exception </span><br><span class="line">     * @Author:konglingbo</span><br><span class="line">     * @date:2018年12月21日  下午8:58:33</span><br><span class="line">     * @Version:1.1.0</span><br><span class="line">     */</span><br><span class="line">    public static String secToTime(int time) throws Exception &#123;</span><br><span class="line">        String timeStr = null;</span><br><span class="line">        int hour = 0;</span><br><span class="line">        int minute = 0;</span><br><span class="line">        int second = 0;</span><br><span class="line">        if (time &lt;= 0)</span><br><span class="line">            return null;</span><br><span class="line">        else &#123;</span><br><span class="line">            minute = time / 60;</span><br><span class="line">            if (minute &lt; 60) &#123;</span><br><span class="line">                second = time % 60;</span><br><span class="line">                timeStr =&quot;00&quot;+ unitFormat(minute) + &quot;:&quot; + unitFormat(second);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                hour = minute / 60;</span><br><span class="line">                if (hour &gt; 24) &#123;</span><br><span class="line">                   throw new Exception(&quot;数值大于24h,无法转换！&quot;);</span><br><span class="line">                &#125;    </span><br><span class="line">                minute = minute % 60;</span><br><span class="line">                second = time - hour * 3600 - minute * 60;</span><br><span class="line">                timeStr = unitFormat(hour) + &quot;:&quot; + unitFormat(minute) + &quot;:&quot; + unitFormat(second);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return timeStr;</span><br><span class="line">    &#125;</span><br><span class="line">    /**</span><br><span class="line">     * </span><br><span class="line">     * @功能描述:hh:mm:ss 转换为sec</span><br><span class="line">     * @param time</span><br><span class="line">     * @return</span><br><span class="line">     * @throws Exception</span><br><span class="line">     * @Author:konglingbo</span><br><span class="line">     * @date:2018年12月21日  下午9:13:38</span><br><span class="line">     * @Version:1.1.0</span><br><span class="line">     */</span><br><span class="line">    public static  int timeToSec(String time) throws Exception &#123;</span><br><span class="line">       if(StringUtils.isEmpty(time)) &#123;</span><br><span class="line">          return 0;</span><br><span class="line">       &#125;</span><br><span class="line">       String[] timeArr=time.split(&quot;:&quot;);</span><br><span class="line">      if(timeArr.length!=3) &#123;</span><br><span class="line">         throw new Exception(&quot;时间不符合格式:hh:mm:ss&quot;);</span><br><span class="line">      &#125;</span><br><span class="line">      time=&quot;1970-01-01 &quot;+time;</span><br><span class="line">      SimpleDateFormat sdf= new  SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss&quot;);</span><br><span class="line">        Date start = sdf.parse(time);</span><br><span class="line">        int hours = start.getHours();</span><br><span class="line">        int minutes = start.getMinutes();</span><br><span class="line">        int seconds = start.getSeconds();</span><br><span class="line">        int totalSeconds=hours*60*60+minutes*60+seconds;</span><br><span class="line">       return totalSeconds;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 返回日时分秒</span><br><span class="line">     * @param second</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    public static String secondToTime(long ms) &#123;</span><br><span class="line">        Integer ss = 1000;  </span><br><span class="line">        Integer mi = ss * 60;  </span><br><span class="line">        Integer hh = mi * 60;  </span><br><span class="line">        Integer dd = hh * 24;  </span><br><span class="line"></span><br><span class="line">        Long day = ms / dd;  </span><br><span class="line">        Long hour = (ms - day * dd) / hh;  </span><br><span class="line">        Long minute = (ms - day * dd - hour * hh) / mi;  </span><br><span class="line">        Long second = (ms - day * dd - hour * hh - minute * mi) / ss;  </span><br><span class="line">        Long milliSecond = ms - day * dd - hour * hh - minute * mi - second * ss;  </span><br><span class="line"></span><br><span class="line">        StringBuffer sb = new StringBuffer();  </span><br><span class="line">        if(day &gt; 0) &#123;  </span><br><span class="line">            sb.append(day+&quot;天&quot;);  </span><br><span class="line">        &#125;  </span><br><span class="line">        if(hour &gt; 0) &#123;  </span><br><span class="line">            sb.append(hour+&quot;:&quot;);  </span><br><span class="line">        &#125;  </span><br><span class="line">        if(minute &gt; 0) &#123;  </span><br><span class="line">            sb.append(minute+&quot;:&quot;);  </span><br><span class="line">        &#125;  </span><br><span class="line">        if(second &gt; 0) &#123;  </span><br><span class="line">            sb.append(second);  </span><br><span class="line">        &#125;  </span><br><span class="line">        if(milliSecond &gt; 0) &#123;  </span><br><span class="line">            sb.append(milliSecond+&quot;毫秒&quot;);  </span><br><span class="line">        &#125;  </span><br><span class="line">        return sb.toString();  </span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">   </span><br><span class="line">    /**</span><br><span class="line">     * </span><br><span class="line">     * @功能描述: YYYYMMDDHHMMSS+6位自增长码(20位)</span><br><span class="line">     * @return</span><br><span class="line">     * String </span><br><span class="line">     * @Author:xiaojianyu</span><br><span class="line">     * @date:2019年1月4日下午2:52:03</span><br><span class="line">     * @Version:1.1.0</span><br><span class="line">     */</span><br><span class="line">   public static synchronized String getLocalTrmSeqNum() &#123;</span><br><span class="line">      sequence = sequence &gt;= 999999 ? 1 : sequence + 1;</span><br><span class="line">      String datetime = new SimpleDateFormat(&quot;yyyyMMddHHmmss&quot;)</span><br><span class="line">      .format(new Date());</span><br><span class="line">      String s = Integer.toString(sequence);</span><br><span class="line">      return datetime +addLeftZero(s, length);</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   /**</span><br><span class="line">    * </span><br><span class="line">    * @功能描述: 左填0</span><br><span class="line">    * @param s</span><br><span class="line">    * @param length</span><br><span class="line">    * @return</span><br><span class="line">    * String </span><br><span class="line">    * @Author:xiaojianyu</span><br><span class="line">    * @date:2019年1月4日下午2:51:56</span><br><span class="line">    * @Version:1.1.0</span><br><span class="line">    */</span><br><span class="line">   public static String addLeftZero(String s, int length) &#123;</span><br><span class="line">      // StringBuilder sb=new StringBuilder();</span><br><span class="line">      int old = s.length();</span><br><span class="line">      if (length &gt; old) &#123;</span><br><span class="line">         char[] c = new char[length];</span><br><span class="line">         char[] x = s.toCharArray();</span><br><span class="line">         if (x.length &gt; length) &#123;</span><br><span class="line">            throw new IllegalArgumentException(</span><br><span class="line">                  &quot;Numeric value is larger than intended length: &quot; + s</span><br><span class="line">                        + &quot; LEN &quot; + length);</span><br><span class="line">         &#125;</span><br><span class="line">         int lim = c.length - x.length;</span><br><span class="line">         for (int i = 0; i &lt; lim; i++) &#123;</span><br><span class="line">            c[i] = &apos;0&apos;;</span><br><span class="line">         &#125;</span><br><span class="line">         System.arraycopy(x, 0, c, lim, x.length);</span><br><span class="line">         return new String(c);</span><br><span class="line">      &#125;</span><br><span class="line">      return s.substring(0, length);</span><br><span class="line"> </span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   public static Date getBeginningOfDaySafe(Date date) &#123;</span><br><span class="line">      if(null==date) &#123;</span><br><span class="line">         return date;</span><br><span class="line">      &#125;</span><br><span class="line">      return getBeginningOfDay(date);</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">   public static Date getLastMilliSecondSafe(Date date) &#123;</span><br><span class="line">      if(null==date) &#123;</span><br><span class="line">         return date;</span><br><span class="line">      &#125;</span><br><span class="line">      return getLastMilliSecond(date);</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+	
+	<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-heart"></i>感谢阅读-------------</div>
+    
+</div>
+  
+	</div>
+	
+	
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java8-date/" rel="tag"># java8 date</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/01/io/" rel="next" title="IO AIO BIO NIO 同步，异步，阻塞和非阻塞">
+                <i class="fa fa-chevron-left"></i> IO AIO BIO NIO 同步，异步，阻塞和非阻塞
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/03/事物隔离级别/" rel="prev" title="事物隔离级别">
+                事物隔离级别 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Zippo">
+            
+              <p class="site-author-name" itemprop="name">Zippo</p>
+              <div class="site-description motion-element" itemprop="description">从一而终，认真且怂</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/WithYouZP" title="GitHub &rarr; https://github.com/WithYouZP" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/2279055065@qq.com" title="E-Mail &rarr; 2279055065@qq.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://weibo.com/u/5413833287?topnav=1&wvr=6&topsug=1&is_hot=1" title="Weibo &rarr; https://weibo.com/u/5413833287?topnav=1&wvr=6&topsug=1&is_hot=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+  <-- <i class="fa fa-user"> -->
+	<i class="fa fa-heart"></i>
+  </--></span>
+  <span class="author" itemprop="copyrightHolder">Zippo</span>
+
+  
+
+  
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.1</div>
+-->
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
